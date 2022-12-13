@@ -17,6 +17,10 @@ Pod::Spec.new do |s|
         "ios": "13.0"
     }
   
-    s.source_files = 'Sources/**/*.{swift}'    
+    s.source_files = 'Sources/**/*.{swift}'  
+	
+    s.dependency 'OktaOidc', '~> 3.11.2'
+    s.dependency 'RequestOperation', '~> 1.2.1' 
+    s.dependency 'KeychainPasswordStore', '~> 1.0.0' 
   end
   
