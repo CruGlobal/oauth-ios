@@ -1,5 +1,5 @@
 //
-//  OAuthPKCECodeChallenge.swift
+//  OAuthCodeChallenge.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -9,7 +9,7 @@
 import Foundation
 import OktaOidc
 
-public class OAuthPKCECodeChallenge {
+public class OAuthCodeChallenge {
     
     public static func newCodeChallengeS256(codeVerifier: String) -> String? {
         

@@ -1,5 +1,5 @@
 //
-//  OAuthPKCEWebSession.swift
+//  OAuthWebSession.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -10,23 +10,25 @@ import UIKit
 import AuthenticationServices
 import Combine
 
-public class OAuthPKCEWebSession: NSObject {
+public class OAuthWebSession: NSObject {
             
-    private let getOAuthPKCETokenApi: GetOAuthPKCETokenApi
-    private let tokenStorage: OAuthPKCETokenKeychainStorage = OAuthPKCETokenKeychainStorage()
-    private let codeChallengeMethod: OAuthPKCECodeChallengeMethod = .s256
+    private let getOAuthTokenApi: GetOAuthTokenApi
+    private let refreshOAuthAccessTokenApi: RefreshOAuthAccessTokenApi
+    private let tokenStorage: OAuthTokenKeychainStorage = OAuthTokenKeychainStorage()
+    private let codeChallengeMethod: OAuthCodeChallengeMethod = .s256
     
     private var authorizeWebAuthenticationSession: ASWebAuthenticationSession?
     private var cancellables: Set<AnyCancellable> = Set()
     
     private weak var webSessionPresentingWindow: UIWindow?
         
-    let configuration: OAuthPKCEWebSessionConfiguration
+    let configuration: OAuthWebSessionConfiguration
     
-    public init(configuration: OAuthPKCEWebSessionConfiguration) {
+    public init(configuration: OAuthWebSessionConfiguration) {
         
         self.configuration = configuration
-        self.getOAuthPKCETokenApi = GetOAuthPKCETokenApi(configuration: configuration)
+        self.getOAuthTokenApi = GetOAuthTokenApi(configuration: configuration)
+        self.refreshOAuthAccessTokenApi = RefreshOAuthAccessTokenApi(configuration: configuration)
         
         super.init()
     }
@@ -38,13 +40,67 @@ public class OAuthPKCEWebSession: NSObject {
     public func getCachedRefreshToken() -> String? {
         return tokenStorage.getRefreshToken()
     }
+}
+
+// MARK: - Revoke
+
+extension OAuthWebSession {
     
-    public func deleteTokens() {
+    public func revoke() {
         
         tokenStorage.deleteToken()
+        
+        // TODO: There should be an api endpoint to revoke as well. ~Levi
+    }
+}
+
+// MARK: - Authenticate
+
+extension OAuthWebSession {
+    
+    public func renewAccessTokenElseAuthenticate(fromWindow: UIWindow, completion: @escaping ((_ result: Result<OAuthTokenDecodable, Error>) -> Void)) {
+        
+        if let refreshToken = getCachedRefreshToken() {
+            
+            renewAccessToken(refreshToken: refreshToken, completion: completion)
+        }
+        else {
+            
+            authenticate(fromWindow: fromWindow, completion: completion)
+        }
     }
     
-    public func authenticate(fromWindow: UIWindow, completion: @escaping ((_ result: Result<OAuthPKCETokenDecodable, Error>) -> Void)) {
+    public func renewAccessToken(refreshToken: String, completion: @escaping ((_ result: Result<OAuthTokenDecodable, Error>) -> Void)) {
+        
+        renewAccessTokenPublisher(refreshToken: refreshToken)
+            .sink { completed in
+                
+                switch completed {
+                case .finished:
+                    break
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            } receiveValue: { (token: OAuthTokenDecodable) in
+                completion(.success(token))
+            }
+            .store(in: &cancellables)
+    }
+    
+    public func renewAccessTokenPublisher(refreshToken: String) -> AnyPublisher<OAuthTokenDecodable, Error> {
+        
+        return refreshOAuthAccessTokenApi.refreshOAuthAccessTokenPublisher(refreshToken: refreshToken)
+            .flatMap({ (token: OAuthTokenDecodable) -> AnyPublisher<OAuthTokenDecodable, Error> in
+                
+                self.tokenStorage.storeToken(token: token)
+                
+                return Just(token).setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            })
+            .eraseToAnyPublisher()
+    }
+    
+    public func authenticate(fromWindow: UIWindow, completion: @escaping ((_ result: Result<OAuthTokenDecodable, Error>) -> Void)) {
         
         authenticatePublisher(fromWindow: fromWindow)
             .sink { (subscriberCompletion: Subscribers.Completion<Error>) in
@@ -57,23 +113,23 @@ public class OAuthPKCEWebSession: NSObject {
                 case .failure(let error):
                     completion(.failure(error))
                 }
-            } receiveValue: { (token: OAuthPKCETokenDecodable) in
+            } receiveValue: { (token: OAuthTokenDecodable) in
                 completion(.success(token))
             }
             .store(in: &cancellables)
     }
     
-    public func authenticatePublisher(fromWindow: UIWindow) -> AnyPublisher<OAuthPKCETokenDecodable, Error> {
+    public func authenticatePublisher(fromWindow: UIWindow) -> AnyPublisher<OAuthTokenDecodable, Error> {
         
         webSessionPresentingWindow = fromWindow
         
         return authorizePublisher()
-            .flatMap({ (response: OAuthPKCEAuthorizeResponse) -> AnyPublisher<OAuthPKCETokenDecodable, Error> in
+            .flatMap({ (response: OAuthAuthorizeResponse) -> AnyPublisher<OAuthTokenDecodable, Error> in
                 
-                return self.getOAuthPKCETokenApi.getOAuthTokenPublisher(code: response.code, codeVerifier: response.codeVerifier)
+                return self.getOAuthTokenApi.getOAuthTokenPublisher(code: response.code, codeVerifier: response.codeVerifier)
                     .eraseToAnyPublisher()
             })
-            .flatMap({ (token: OAuthPKCETokenDecodable) -> AnyPublisher<OAuthPKCETokenDecodable, Error> in
+            .flatMap({ (token: OAuthTokenDecodable) -> AnyPublisher<OAuthTokenDecodable, Error> in
                 
                 self.tokenStorage.storeToken(token: token)
                 
@@ -82,21 +138,26 @@ public class OAuthPKCEWebSession: NSObject {
             })
             .eraseToAnyPublisher()
     }
+}
+
+// MARK: - Authorize With ASWebAuthenticationSession
+
+extension OAuthWebSession {
     
-    private func authorize(completion: @escaping ((_ result: Result<OAuthPKCEAuthorizeResponse, Error>) -> Void)) {
+    private func authorize(completion: @escaping ((_ result: Result<OAuthAuthorizeResponse, Error>) -> Void)) {
         
         if let authorizeWebAuthenticationSession = self.authorizeWebAuthenticationSession {
             authorizeWebAuthenticationSession.cancel()
             self.authorizeWebAuthenticationSession = nil
         }
         
-        guard let codeVerifier = OAuthPKCECodeVerifier.newCodeVerifier() else {
+        guard let codeVerifier = OAuthCodeVerifier.newCodeVerifier() else {
             let error: Error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate codeVerifier"])
             completion(.failure(error))
             return
         }
         
-        guard let codeChallengeS256 = OAuthPKCECodeChallenge.newCodeChallengeS256(codeVerifier: codeVerifier) else {
+        guard let codeChallengeS256 = OAuthCodeChallenge.newCodeChallengeS256(codeVerifier: codeVerifier) else {
             let error: Error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate codeChallenge"])
             completion(.failure(error))
             return
@@ -123,7 +184,7 @@ public class OAuthPKCEWebSession: NSObject {
                 return
             }
             
-            let authorizeResponse = OAuthPKCEAuthorizeResponse(
+            let authorizeResponse = OAuthAuthorizeResponse(
                 code: code,
                 codeVerifier: codeVerifier
             )
@@ -140,11 +201,11 @@ public class OAuthPKCEWebSession: NSObject {
         self.authorizeWebAuthenticationSession = authorizeWebAuthenticationSession
     }
     
-    private func authorizePublisher() -> AnyPublisher<OAuthPKCEAuthorizeResponse, Error> {
+    private func authorizePublisher() -> AnyPublisher<OAuthAuthorizeResponse, Error> {
         
         return Future() { promise in
             
-            self.authorize { (result: Result<OAuthPKCEAuthorizeResponse, Error>) in
+            self.authorize { (result: Result<OAuthAuthorizeResponse, Error>) in
                 
                 switch result {
                 
@@ -177,7 +238,7 @@ public class OAuthPKCEWebSession: NSObject {
         return nil
     }
     
-    private func getAuthorizeUrl(configuration: OAuthPKCEWebSessionConfiguration, codeChallenge: String, codeChallengeMethod: OAuthPKCECodeChallengeMethod) -> URL? {
+    private func getAuthorizeUrl(configuration: OAuthWebSessionConfiguration, codeChallenge: String, codeChallengeMethod: OAuthCodeChallengeMethod) -> URL? {
         
         let codeChallengeMethodValue: String
         
@@ -209,7 +270,9 @@ public class OAuthPKCEWebSession: NSObject {
     }
 }
 
-extension OAuthPKCEWebSession: ASWebAuthenticationPresentationContextProviding {
+// MARK: - ASWebAuthenticationPresentationContextProviding
+
+extension OAuthWebSession: ASWebAuthenticationPresentationContextProviding {
     
     public func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         

@@ -1,5 +1,5 @@
 //
-//  OAuthPKCECodeVerifier.swift
+//  OAuthCodeVerifier.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -9,7 +9,7 @@
 import Foundation
 import OktaOidc
 
-public class OAuthPKCECodeVerifier {
+public class OAuthCodeVerifier {
     
     public static func newCodeVerifier() -> String? {
         

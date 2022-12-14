@@ -1,5 +1,5 @@
 //
-//  OAuthPKCETokenDecodable.swift
+//  OAuthTokenDecodable.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OAuthPKCETokenDecodable: Decodable {
+public struct OAuthTokenDecodable: Decodable {
     
     public let accessToken: String
     public let expiresIn: Int
