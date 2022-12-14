@@ -1,5 +1,5 @@
 //
-//  OAuthPKCEAuthorizeResponse.swift
+//  OAuthCodeChallengeMethod.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -8,8 +8,7 @@
 
 import Foundation
 
-public struct OAuthPKCEAuthorizeResponse {
+public enum OAuthCodeChallengeMethod {
     
-    public let code: String
-    public let codeVerifier: String
+    case s256
 }

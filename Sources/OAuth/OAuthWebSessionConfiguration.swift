@@ -1,5 +1,5 @@
 //
-//  OAuthPKCEWebSessionConfiguration.swift
+//  OAuthWebSessionConfiguration.swift
 //  OAuth
 //
 //  Created by Levi Eggert on 12/13/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class OAuthPKCEWebSessionConfiguration {
+public class OAuthWebSessionConfiguration {
     
     public let clientId: String
     public let oauthAuthorizeUrl: String
