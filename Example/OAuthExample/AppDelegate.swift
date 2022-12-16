@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private lazy var configuration: OAuthWebSessionConfiguration = {
         OAuthWebSessionConfiguration(
+            callbackUrlScheme: "org.mpdx.mobile",
             clientId: "jN7nBLI9_H_yIZhcN4yk6hnSjc8i0adFnmy6SR38dps",
             oauthAuthorizeUrl: "https://api.stage.mpdx.org/oauth/authorize",
             oauthTokenRequestUrl: "https://api.stage.mpdx.org/oauth/token",
@@ -27,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     private let navigationController: UINavigationController = UINavigationController()
+    
+    private var authenticationStarted: Bool = false
     
     var window: UIWindow?
     
@@ -61,9 +64,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return
         }
         
+        guard !authenticationStarted else {
+            return
+        }
+        
+        authenticationStarted = true
+        
         oauthWebSession.authenticate(fromWindow: window) { (result: Result<OAuthTokenDecodable, Error>) in
             
-            print(result)
         }
     }
 
