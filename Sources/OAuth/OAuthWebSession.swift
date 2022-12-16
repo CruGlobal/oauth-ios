@@ -168,8 +168,8 @@ extension OAuthWebSession {
             completion(.failure(error))
             return
         }
-                       
-        let authorizeWebAuthenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: configuration.redirectUri, completionHandler: { [weak self] (url: URL?, error: Error?) in
+                                       
+        let authorizeWebAuthenticationSession = ASWebAuthenticationSession(url: url, callbackURLScheme: configuration.callbackUrlScheme, completionHandler: { [weak self] (url: URL?, error: Error?) in
             
             if let error = error {
                 

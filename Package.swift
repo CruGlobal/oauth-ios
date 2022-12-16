@@ -26,7 +26,8 @@ let package = Package(
                 .product(name: "OktaOidc", package: "okta-oidc-ios"),
                 .product(name: "RequestOperation", package: "request-operation-ios"),
                 .product(name: "KeychainPasswordStore", package: "keychain-password-store-ios")
-            ]),
+            ],
+            exclude: ["Example"]),
         .testTarget(
             name: "OAuthTests",
             dependencies: ["OAuth"]),
