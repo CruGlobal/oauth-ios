@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4573D145294CB03B00E575EE /* OAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4573D144294CB03B00E575EE /* OAuth */; };
 		45BB6536294BF6A8000ADE4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BB6535294BF6A8000ADE4B /* Assets.xcassets */; };
 		45BB653A294BF6A8000ADE4B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BB6539294BF6A8000ADE4B /* Preview Assets.xcassets */; };
 		45BB6544294BF6A8000ADE4B /* OAuthExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB6543294BF6A8000ADE4B /* OAuthExampleTests.swift */; };
@@ -54,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4573D145294CB03B00E575EE /* OAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +84,13 @@
 			name = Packages;
 			sourceTree = "<group>";
 		};
+		4573D143294CB03B00E575EE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		45BB6525294BF6A7000ADE4B = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +99,7 @@
 				45BB6542294BF6A8000ADE4B /* OAuthExampleTests */,
 				45BB654C294BF6A8000ADE4B /* OAuthExampleUITests */,
 				45BB652F294BF6A7000ADE4B /* Products */,
+				4573D143294CB03B00E575EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,6 +167,9 @@
 			dependencies = (
 			);
 			name = OAuthExample;
+			packageProductDependencies = (
+				4573D144294CB03B00E575EE /* OAuth */,
+			);
 			productName = OAuthExample;
 			productReference = 45BB652E294BF6A7000ADE4B /* OAuthExample.app */;
 			productType = "com.apple.product-type.application";
@@ -624,6 +637,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4573D144294CB03B00E575EE /* OAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 45BB6526294BF6A7000ADE4B /* Project object */;
 }
