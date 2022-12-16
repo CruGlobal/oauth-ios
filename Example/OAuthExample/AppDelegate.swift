@@ -6,10 +6,26 @@
 //
 
 import UIKit
+import OAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-            
+    
+    private lazy var configuration: OAuthWebSessionConfiguration = {
+        OAuthWebSessionConfiguration(
+            clientId: "jN7nBLI9_H_yIZhcN4yk6hnSjc8i0adFnmy6SR38dps",
+            oauthAuthorizeUrl: "https://api.stage.mpdx.org/oauth/authorize",
+            oauthTokenRequestUrl: "https://api.stage.mpdx.org/oauth/token",
+            prefersEphemeralWebBrowserSession: false,
+            redirectUri: "org.mpdx.mobile:/auth"
+        )
+    }()
+    
+    private lazy var oauthWebSession: OAuthWebSession = {
+       
+        OAuthWebSession(configuration: configuration)
+    }()
+    
     private let navigationController: UINavigationController = UINavigationController()
     
     var window: UIWindow?
@@ -41,10 +57,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         
-        let rootViewController = UIViewController()
-        rootViewController.view.backgroundColor = UIColor.red
+        guard let window = self.window else {
+            return
+        }
         
-        navigationController.present(rootViewController, animated: true)
+        oauthWebSession.authenticate(fromWindow: window) { (result: Result<OAuthTokenDecodable, Error>) in
+            
+            print(result)
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
