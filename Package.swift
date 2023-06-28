@@ -27,7 +27,7 @@ let package = Package(
                 .product(name: "RequestOperation", package: "request-operation-ios"),
                 .product(name: "KeychainPasswordStore", package: "keychain-password-store-ios")
             ],
-            exclude: ["Example"]),
+            exclude: ["../../Example"]),
         .testTarget(
             name: "OAuthTests",
             dependencies: ["OAuth"]),
