@@ -14,8 +14,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/okta/okta-oidc-ios.git", .upToNextMinor(from: "3.11.2")),
-        .package(url: "https://github.com/CruGlobal/request-operation-ios.git", .upToNextMinor(from: "1.2.1")),
-        .package(url: "https://github.com/CruGlobal/keychain-password-store-ios.git", .upToNextMinor(from: "1.0.0"))
+        .package(url: "https://github.com/CruGlobal/request-operation-ios.git", .upToNextMinor(from: "1.3.2")),
+        .package(url: "https://github.com/CruGlobal/keychain-password-store-ios.git", .upToNextMinor(from: "1.0.3"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -27,7 +27,7 @@ let package = Package(
                 .product(name: "RequestOperation", package: "request-operation-ios"),
                 .product(name: "KeychainPasswordStore", package: "keychain-password-store-ios")
             ],
-            exclude: ["Example"]),
+            exclude: ["../../Example"]),
         .testTarget(
             name: "OAuthTests",
             dependencies: ["OAuth"]),
