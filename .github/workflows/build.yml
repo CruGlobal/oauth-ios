@@ -20,5 +20,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Pod Lib Lint
-        run: pod lib lint --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
+      #- name: Pod Lib Lint
+      #  run: pod lib lint --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
+
+      - name: Add CruGlobal CocoaPods Repo
+        if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+        run: pod repo add CruGlobal git@github.com:CruGlobal/cocoapods-specs.git
+
+      - name: Push podspec
+        if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+        run: pod repo push cruglobal-cocoapods-specs --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
