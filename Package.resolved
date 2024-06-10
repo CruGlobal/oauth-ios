@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/okta/okta-oidc-ios.git",
       "state" : {
-        "revision" : "91eac722b8e859ba7f15d65a9085a64a296bc065",
-        "version" : "3.11.2"
+        "revision" : "03439c95d16c44831ff12df664e3eae555985923",
+        "version" : "3.11.5"
       }
     },
     {
