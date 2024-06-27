@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/CruGlobal/oauth-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/CruGlobal/oauth-ios)
+
 OAuth
 =====
 
