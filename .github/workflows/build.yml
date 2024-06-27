@@ -1,32 +1,105 @@
-name: Build
+name: Build Library
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-    
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: macos-14
 
+  lint_ios_podspec:
+    name: Lint iOS Podspec
+    runs-on: macos-14
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Lint Podspec
+        run: pod lib lint --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
 
-      #- name: Pod Lib Lint
-      #  run: pod lib lint --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
+  current_version:
+    name: Store Current Version
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set Version Output
+        id: version
+        run: grep s\\.version\\s OAuth.podspec | sed 's/s.//' | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
 
+  print_current_version:
+    name: Print Current Version
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [ current_version ]
+    steps:
+      - name: Print Current Version
+        env:
+          VERSION: ${{ needs.current_version.outputs.version }}
+        run: |
+          printf '%s\n' "$VERSION"
+
+  check_version:
+    name: Verify Version Is Not Released
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [ current_version ]
+    outputs:
+      tag: ${{ steps.tag_name.outputs.tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Generate Tag Name
+        id: tag_name
+        run: echo tag=$TAG_NAME >> $GITHUB_OUTPUT
+        env:
+          TAG_NAME: ${{ needs.current_version.outputs.version }}
+      - name: Check if version was already released
+        run: "! git ls-remote -t --exit-code origin $TAG_NAME"
+        env:
+          TAG_NAME: ${{ steps.tag_name.outputs.tag }}
+
+  tag_version:
+    name: Tag Version
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [ check_version, current_version ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Tag
+        env:
+          TAG_NAME: ${{ needs.current_version.outputs.version }}
+        run: |
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+  push_podspec:
+    name: Push Podspec
+    runs-on: macos-14
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [ check_version, tag_version ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Add CruGlobal CocoaPods Repo
-        if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
         run: pod repo add CruGlobal git@github.com:CruGlobal/cocoapods-specs.git
-
       - name: Push podspec
-        if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
-        run: pod repo push cruglobal-cocoapods-specs --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
+        run: pod repo push CruGlobal *.podspec --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
