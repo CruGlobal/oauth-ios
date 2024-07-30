@@ -1,0 +1,10 @@
+version: 2
+updates:
+- package-ecosystem: swift
+  directory: "/"
+  schedule:
+    interval: daily
+  reviewers:
+  - levieggertcru
+  assignees:
+  - levieggertcru
