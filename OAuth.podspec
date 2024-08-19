@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name = 'OAuth'
-    s.version = '1.2.3'
+    s.version = '1.2.4'
     s.summary = 'Generic OAuth implementation using PKCE flow and ASWebAuthenticationSession.'
   
   
