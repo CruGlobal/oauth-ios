@@ -13,6 +13,7 @@ import Combine
 public class RefreshOAuthAccessTokenApi {
     
     private let configuration: OAuthWebSessionConfiguration
+    private let requestBuilder: RequestBuilder = RequestBuilder()
     
     lazy var session: URLSession = {
         
@@ -43,14 +44,16 @@ public class RefreshOAuthAccessTokenApi {
             URLQueryItem(name: "refresh_token", value: refreshToken)
         ]
         
-        return RequestBuilder().build(
-            session: session,
+        let parameters = RequestBuilderParameters(
+            urlSession: session,
             urlString: configuration.oauthTokenRequestUrl,
             method: RequestMethod.post,
             headers: ["Content-Type": "application/x-www-form-urlencoded"],
             httpBody: nil,
             queryItems: queryItems
         )
+        
+        return requestBuilder.build(parameters: parameters)
     }
     
     public func refreshOAuthAccessTokenPublisher(refreshToken: String) -> AnyPublisher<OAuthTokenDecodable, Error> {
