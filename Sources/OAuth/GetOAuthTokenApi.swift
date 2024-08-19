@@ -13,6 +13,7 @@ import Combine
 public class GetOAuthTokenApi {
     
     private let configuration: OAuthWebSessionConfiguration
+    private let requestBuilder: RequestBuilder = RequestBuilder()
     
     lazy var session: URLSession = {
         
@@ -44,14 +45,16 @@ public class GetOAuthTokenApi {
             URLQueryItem(name: "redirect_uri", value: configuration.redirectUri)
         ]
         
-        return RequestBuilder().build(
-            session: session,
+        let parameters = RequestBuilderParameters(
+            urlSession: session,
             urlString: configuration.oauthTokenRequestUrl,
             method: RequestMethod.post,
             headers: ["Content-Type": "application/x-www-form-urlencoded"],
             httpBody: nil,
             queryItems: queryItems
         )
+        
+        return requestBuilder.build(parameters: parameters)
     }
     
     public func getOAuthTokenPublisher(code: String, codeVerifier: String) -> AnyPublisher<OAuthTokenDecodable, Error> {
