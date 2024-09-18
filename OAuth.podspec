@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
     s.name = 'OAuth'
-    s.version = '1.2.6'
+    s.version = '1.2.7'
     s.summary = 'Generic OAuth implementation using PKCE flow and ASWebAuthenticationSession.'
   
   
@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
     s.source_files = 'Sources/**/*.{swift}'  
 	
     s.dependency 'OktaOidc', '~> 3.11.5'
-    s.dependency 'RequestOperation', '~> 1.8.1' 
+    s.dependency 'RequestOperation', '~> 1.10.3' 
     s.dependency 'KeychainPasswordStore', '~> 1.0.3' 
   end
   
