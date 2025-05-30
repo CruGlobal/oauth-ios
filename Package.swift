@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/okta/okta-oidc-ios.git", .upToNextMinor(from: "3.11.5")),
-        .package(url: "https://github.com/CruGlobal/request-operation-ios.git", .upToNextMinor(from: "1.10.3")),
+        .package(url: "https://github.com/CruGlobal/request-operation-ios.git", .upToNextMinor(from: "1.12.0")),
         .package(url: "https://github.com/CruGlobal/keychain-password-store-ios.git", .upToNextMinor(from: "1.0.3"))
     ],
     targets: [
