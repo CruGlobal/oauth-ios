@@ -12,16 +12,6 @@ concurrency:
 
 jobs:
 
-  lint_ios_podspec:
-    name: Lint iOS Podspec
-    runs-on: macos-14
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Lint Podspec
-        run: pod lib lint --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
-
   current_version:
     name: Store Current Version
     runs-on: ubuntu-latest
@@ -81,25 +71,3 @@ jobs:
         run: |
           git tag $TAG_NAME
           git push origin $TAG_NAME
-
-  push_podspec:
-    name: Push Podspec
-    runs-on: macos-14
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main')
-    needs: [ check_version, tag_version ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Add CruGlobal CocoaPods Repo
-        run: pod repo add CruGlobal git@github.com:CruGlobal/cocoapods-specs.git
-      - name: Push podspec
-        run: pod repo push CruGlobal *.podspec --private --verbose --sources=https://github.com/CruGlobal/cocoapods-specs.git,https://cdn.cocoapods.org/
