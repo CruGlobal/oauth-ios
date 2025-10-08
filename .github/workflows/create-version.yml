@@ -1,11 +1,6 @@
 name: Create Version
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-    
   workflow_dispatch:
     inputs:
       versionIncrementType:
@@ -60,7 +55,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Set Version Output
         id: version
-        run: grep s\\.version\\s OAuth.podspec | sed 's/s.//' | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
+        run: grep version VERSION | sed "s/'//g" | sed 's/ //g' >> $GITHUB_OUTPUT
 
   print_current_version:
     name: Print Current Version
@@ -165,9 +160,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set Podspec Version to New Version
+      - name: Set New Version Number
         run: |
-          sed -i "s/s.version = '${{ needs.current_version.outputs.version }}'/s.version = '${{ needs.new_version.outputs.version }}'/g" OAuth.podspec
+          sed -i "s/version = '${{ needs.current_version.outputs.version }}'/version = '${{ needs.new_version.outputs.version }}'/g" VERSION
       - name: Create Version Branch and PR
         uses: peter-evans/create-pull-request@v6
         with:
