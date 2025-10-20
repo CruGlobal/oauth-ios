@@ -6,27 +6,16 @@ on:
   pull_request:
     branches: [ main ]
 
+  workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   run_tests_and_code_coverage:
-    name: Run Tests and Code Coverage
-    runs-on: macos-15
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Select Xcode Version
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: '26.0.1'
-      - name: Run Tests
-        run: xcodebuild test -scheme OAuth -destination "OS=26.0,name=iPhone 17"
-      - name: Upload Xcode Code Coverage Report to CodeCov
-        uses: codecov/codecov-action@v4
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          xcode: true
+    uses: CruGlobal/godtools-swift/.github/workflows/shared-spm-run-tests.yml@master
+    with:
+      xcodebuild-test-scheme: OAuth
+    secrets:
+      codecov_token: ${{ secrets.CODECOV_TOKEN }}
