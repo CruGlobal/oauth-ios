@@ -1,12 +1,13 @@
 {
+  "originHash" : "8ab85b7441f1426d7d6eeac8c6bf6937cdf9334d689e8eaa40d2cdac16f1ae2f",
   "pins" : [
     {
       "identity" : "keychain-password-store-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CruGlobal/keychain-password-store-ios.git",
       "state" : {
-        "revision" : "d5b628d64147828e305bcf4bb1fffacf9ce56a5c",
-        "version" : "1.0.3"
+        "revision" : "dbebb89b71dd5332679bdd01a0b4c6368bdb8792",
+        "version" : "1.1.0"
       }
     },
     {
@@ -23,10 +24,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CruGlobal/request-operation-ios.git",
       "state" : {
-        "revision" : "1aafc6ec4dc31d47f214161ba795208ab0aa97dc",
-        "version" : "1.12.2"
+        "revision" : "cb2edf44a67e94023c723adc4661bcf551dc5b94",
+        "version" : "1.12.6"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
