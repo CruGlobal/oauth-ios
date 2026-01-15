@@ -1,4 +1,5 @@
 {
+  "originHash" : "a5958829ba14188beab585fddd09f60d798ef04351d12f558fac04a512808884",
   "pins" : [
     {
       "identity" : "keychain-password-store-ios",
@@ -23,10 +24,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CruGlobal/request-operation-ios.git",
       "state" : {
-        "revision" : "cb2edf44a67e94023c723adc4661bcf551dc5b94",
-        "version" : "1.12.6"
+        "revision" : "8228340f1e39eb0dd9df5794da46206ad5155b04",
+        "version" : "1.13.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
