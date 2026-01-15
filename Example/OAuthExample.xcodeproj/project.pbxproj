@@ -10,9 +10,6 @@
 		4573D145294CB03B00E575EE /* OAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 4573D144294CB03B00E575EE /* OAuth */; };
 		45BB6536294BF6A8000ADE4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BB6535294BF6A8000ADE4B /* Assets.xcassets */; };
 		45BB653A294BF6A8000ADE4B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45BB6539294BF6A8000ADE4B /* Preview Assets.xcassets */; };
-		45BB6544294BF6A8000ADE4B /* OAuthExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB6543294BF6A8000ADE4B /* OAuthExampleTests.swift */; };
-		45BB654E294BF6A8000ADE4B /* OAuthExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB654D294BF6A8000ADE4B /* OAuthExampleUITests.swift */; };
-		45BB6550294BF6A8000ADE4B /* OAuthExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB654F294BF6A8000ADE4B /* OAuthExampleUITestsLaunchTests.swift */; };
 		45BB655D294BF6FB000ADE4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB655C294BF6FB000ADE4B /* AppDelegate.swift */; };
 		45BB655F294BF84B000ADE4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45BB655E294BF84B000ADE4B /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -41,10 +38,7 @@
 		45BB6537294BF6A8000ADE4B /* OAuthExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OAuthExample.entitlements; sourceTree = "<group>"; };
 		45BB6539294BF6A8000ADE4B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		45BB653F294BF6A8000ADE4B /* OAuthExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OAuthExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		45BB6543294BF6A8000ADE4B /* OAuthExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthExampleTests.swift; sourceTree = "<group>"; };
 		45BB6549294BF6A8000ADE4B /* OAuthExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OAuthExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		45BB654D294BF6A8000ADE4B /* OAuthExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthExampleUITests.swift; sourceTree = "<group>"; };
-		45BB654F294BF6A8000ADE4B /* OAuthExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		45BB655C294BF6FB000ADE4B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		45BB655E294BF84B000ADE4B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45BB6560294BF87D000ADE4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -137,7 +131,6 @@
 		45BB6542294BF6A8000ADE4B /* OAuthExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				45BB6543294BF6A8000ADE4B /* OAuthExampleTests.swift */,
 			);
 			path = OAuthExampleTests;
 			sourceTree = "<group>";
@@ -145,8 +138,6 @@
 		45BB654C294BF6A8000ADE4B /* OAuthExampleUITests */ = {
 			isa = PBXGroup;
 			children = (
-				45BB654D294BF6A8000ADE4B /* OAuthExampleUITests.swift */,
-				45BB654F294BF6A8000ADE4B /* OAuthExampleUITestsLaunchTests.swift */,
 			);
 			path = OAuthExampleUITests;
 			sourceTree = "<group>";
@@ -293,7 +284,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45BB6544294BF6A8000ADE4B /* OAuthExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,8 +291,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45BB654E294BF6A8000ADE4B /* OAuthExampleUITests.swift in Sources */,
-				45BB6550294BF6A8000ADE4B /* OAuthExampleUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
