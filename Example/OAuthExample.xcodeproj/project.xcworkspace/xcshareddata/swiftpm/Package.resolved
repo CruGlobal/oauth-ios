@@ -1,12 +1,13 @@
 {
+  "originHash" : "a5958829ba14188beab585fddd09f60d798ef04351d12f558fac04a512808884",
   "pins" : [
     {
       "identity" : "keychain-password-store-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CruGlobal/keychain-password-store-ios.git",
       "state" : {
-        "revision" : "d5b628d64147828e305bcf4bb1fffacf9ce56a5c",
-        "version" : "1.0.3"
+        "revision" : "dbebb89b71dd5332679bdd01a0b4c6368bdb8792",
+        "version" : "1.1.0"
       }
     },
     {
@@ -14,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/okta/okta-oidc-ios.git",
       "state" : {
-        "revision" : "03439c95d16c44831ff12df664e3eae555985923",
-        "version" : "3.11.5"
+        "revision" : "ff0b914c25f0638a08c837d433841d4fa22a79cc",
+        "version" : "3.11.7"
       }
     },
     {
@@ -23,10 +24,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/CruGlobal/request-operation-ios.git",
       "state" : {
-        "revision" : "165a4124e396214b759e40f1e4e69575d2a257f2",
-        "version" : "1.5.1"
+        "revision" : "8228340f1e39eb0dd9df5794da46206ad5155b04",
+        "version" : "1.13.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
